@@ -46,6 +46,7 @@ export async function POST(req: NextRequest) {
     if (eventType === "user.created" || eventType === "user.updated") {
 
       const primaryEmail = (data.email_addresses?.find((e: any) => e.id === data.primary_email_address_id)?.email_address || data.email_addresses?.[0]?.email_address || null) as string | null;
+      console.log(data.email_addresses)
       const checkforsoftdelete = await User.findOneAndUpdate(
             { email: data.email_address},
             { $set: {deleted: false} },
