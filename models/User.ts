@@ -23,6 +23,5 @@ const UserSchema = new Schema<IUser>(
   { timestamps: true }
 );
 
-UserSchema.index({ email: 1 });
 
 export default (models.User as mongoose.Model<IUser>) || model<IUser>("User", UserSchema);
