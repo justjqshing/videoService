@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { Webhook } from "svix";
 import { connectToDatabase } from "@/lib/mongoose";
 import User from "@/models/User";
+import {clerkClient} from "@clerk/nextjs/server";
 
 // Clerk sends webhooks signed via Svix. We'll verify using CLERK_WEBHOOK_SECRET
 export async function POST(req: NextRequest) {
@@ -49,9 +50,12 @@ export async function POST(req: NextRequest) {
       console.log(data.email_addresses)
       const checkforsoftdelete = await User.findOneAndUpdate(
             { email: data.email_addresses[0].email_address.toLowerCase()},
-            { $set: {deleted: false} },
+            { $set: { deleted: false } },
+            { new: true }
         );
-      if (checkforsoftdelete) {return;}
+      if (checkforsoftdelete) {
+        return NextResponse.json({ ok: true, userId: checkforsoftdelete._id?.toString?.() ?? null }, { status: 200 });
+      }
       const doc = {
         clerkId: data.id as string,
         email: primaryEmail ? primaryEmail.toLowerCase() : null,
@@ -60,12 +64,22 @@ export async function POST(req: NextRequest) {
         imageUrl: (data.image_url as string | null) ?? null,
         deleted: false,
       };
-
-      await User.findOneAndUpdate(
+      const _id = await User.findOneAndUpdate(
         { clerkId: doc.clerkId },
         { $set: doc },
-        { upsert: true, new: true }
+        { upsert: true, new: true },
       );
+      console.log(_id)
+        console.log(_id?._id)
+        if (eventType === "user.created") {
+            const clerk = await clerkClient();
+            await clerk.users.updateUserMetadata(data.id, {
+                privateMetadata: {
+                    id: _id
+                }
+            })
+        }
+
     } else if (eventType === "user.deleted") {
       // Clerk sends data with id of deleted user; mark as deleted (soft delete)
       const clerkId = (data.id as string) ?? "";
@@ -82,6 +96,5 @@ export async function POST(req: NextRequest) {
 }
 
 export async function GET() {
-  // Optional: simple health check for the route (no secrets revealed)
   return NextResponse.json({ status: "ok" });
 }
