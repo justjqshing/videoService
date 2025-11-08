@@ -75,7 +75,7 @@ export async function POST(req: NextRequest) {
             const clerk = await clerkClient();
             await clerk.users.updateUserMetadata(data.id, {
                 privateMetadata: {
-                    id: _id
+                    id: _id?._id
                 }
             })
         }
