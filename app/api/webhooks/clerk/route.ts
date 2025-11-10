@@ -69,8 +69,7 @@ export async function POST(req: NextRequest) {
         { $set: doc },
         { upsert: true, new: true },
       );
-      console.log(_id)
-        console.log(_id?._id)
+
         if (eventType === "user.created") {
             const clerk = await clerkClient();
             await clerk.users.updateUserMetadata(data.id, {
