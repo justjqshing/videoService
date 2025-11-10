@@ -4,8 +4,6 @@ import Image from "next/image";
 import { SignedIn, SignedOut, SignInButton, SignUpButton, UserButton } from "@clerk/nextjs";
 import Link from "next/link";
 import {currentUser} from "@clerk/nextjs/server";
-import {connectToDatabase} from "@/lib/mongoose";
-import Notifications from "@/components/notification";
 const Nav = async () => {
     let data;
     const user = await currentUser();
