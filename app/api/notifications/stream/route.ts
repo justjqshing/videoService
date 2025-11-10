@@ -37,16 +37,10 @@ export async function GET(req: NextRequest) {
     const changeStream = collection.watch(pipeline, { fullDocument: "updateLookup" });
 
     changeStream.on("change", (next) => {
-        if (
-            next.operationType === "insert" ||
-            next.operationType === "update" ||
-            next.operationType === "replace"
-        ) {
-            const data = next.fullDocument?._id;
-            console.log("🔄 Change detected:", data);
+        for (const client of clients) {
+            client.send({ _id: next.fullDocument?._id });
         }
     });
-
 
     return new Response(stream, {
         headers: {
