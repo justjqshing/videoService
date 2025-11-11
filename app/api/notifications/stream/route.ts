@@ -38,7 +38,11 @@ export async function GET(req: NextRequest) {
 
     changeStream.on("change", (next) => {
         for (const client of clients) {
-            client.send({ _id: next.fullDocument?._id });
+            console.log(next)
+            if (next.operationType === 'update') {
+                client.send({ _id: next.fullDocument?._id });
+            }
+
         }
     });
 

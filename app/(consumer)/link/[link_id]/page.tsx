@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import {getThumbnail} from "@/lib/actions/cloudinary/thumbnail/route";
+import {Spinner} from "@/components/ui/spinner";
 
 type PageProps = {
     params: { link_id: string } | Promise<{ link_id: string }>;
@@ -87,9 +88,10 @@ export default function ScreenRecordButton({ params }: PageProps) {
             recorder.onstop = async () => {
                 const blob = new Blob(chunksRef.current, { type: "video/webm" });
                 const localFile = new File([blob], "recording.webm", { type: "video/webm" });
-
-                setPreviewUrl(URL.createObjectURL(blob)); // show preview
-                setFile(localFile); // save for confirmed upload
+                setRecording(false);
+                toast.success("Recording stopped. Preview available below.");
+                setPreviewUrl(URL.createObjectURL(blob));
+                setFile(localFile);
             };
 
             recorder.start();
@@ -107,7 +109,6 @@ export default function ScreenRecordButton({ params }: PageProps) {
             mediaRecorderRef.current.stop();
             mediaRecorderRef.current.stream.getTracks().forEach((t) => t.stop());
             setRecording(false);
-            toast("Recording stopped. Preview available below.");
         }
     }
 
@@ -141,7 +142,6 @@ export default function ScreenRecordButton({ params }: PageProps) {
             const data = await res.json();
             if (!res.ok || !data.secure_url) throw new Error(data.error?.message || "Upload failed");
 
-            setVideoUrl(data.secure_url);
             const thumbnail = await getThumbnail(data.secure_url)
 
             toast.success("Uploaded to Cloudinary!");
@@ -168,7 +168,11 @@ export default function ScreenRecordButton({ params }: PageProps) {
     }
 
     return (
-        <div className="flex flex-col items-center gap-3">
+        <div className="flex flex-col items-center gap-6 w-screen flex-1 justify-center">
+
+            {!previewUrl && ( <h1 className={'text-2xl'}>Please take a short Screen Recording to be sent to your support agent.</h1>)}
+            <div className={'flex flex-row gap-5'}>
+
             <Button
                 onClick={recording ? stopRecording : startRecording}
                 disabled={uploading}
@@ -176,27 +180,31 @@ export default function ScreenRecordButton({ params }: PageProps) {
             >
                 {recording ? "Stop Recording" : uploading ? "Uploading..." : "Record Screen"}
             </Button>
+                {previewUrl && (
+            <Button
+                className=""
+                onClick={() => file && uploadToCloudinaryAndSave(file)}
+                disabled={uploading}
+                variant='confirm'
+            >
+                { uploading && (<Spinner />)}
+                Confirm Upload
+            </Button>
+                    )}
 
-            {previewUrl && !videoUrl && (
-                <div className="w-full max-w-md">
+            </div>
+
+            {previewUrl && (
+                <>
+                <div className="w-full max-w-4xl">
                     <p className="text-sm text-gray-500">Preview (before upload):</p>
-                    <video src={previewUrl} controls className="w-full rounded-lg mt-2" />
-                    <Button
-                        className="mt-2"
-                        onClick={() => file && uploadToCloudinaryAndSave(file)}
-                        disabled={uploading}
-                    >
-                        Confirm Upload
-                    </Button>
+                    <video src={previewUrl} width={1000} className=" rounded-lg mt-2" />
+
                 </div>
+
+                </>
             )}
 
-            {videoUrl && (
-                <div className="w-full max-w-md">
-                    <p className="text-sm text-gray-500">Uploaded video:</p>
-                    <video src={videoUrl} controls className="w-full rounded-lg mt-2" />
-                </div>
-            )}
         </div>
     );
 }

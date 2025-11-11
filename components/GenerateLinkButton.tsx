@@ -42,7 +42,7 @@ export default function GenerateLinkButton() {
 
             const data = (await res.json()) as { id: string; videoUrl?: string | null };
             setResult({ id: data.id });
-            await navigator.clipboard.writeText(`${window.location.origin}/links/${data.id}`);
+            await navigator.clipboard.writeText(`${window.location.origin}/link/${data.id}`);
             toast.info("Copied to clipboard!");
             setClientName("")
             router.refresh();
