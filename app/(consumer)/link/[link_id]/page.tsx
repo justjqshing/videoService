@@ -198,7 +198,7 @@ export default function ScreenRecordButton({ params }: PageProps) {
                 <>
                 <div className="w-full max-w-4xl">
                     <p className="text-sm text-gray-500">Preview (before upload):</p>
-                    <video src={previewUrl} width={1000} className=" rounded-lg mt-2" />
+                    <video src={previewUrl} width={1000} controls className=" rounded-lg mt-2" />
 
                 </div>
 
