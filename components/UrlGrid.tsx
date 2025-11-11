@@ -20,7 +20,7 @@ interface UrlGridProps {
 const UrlGrid = ({ plainLinks }: UrlGridProps) => {
 
     return (
-        <div className="grid grid-cols-3 gap-6 w-full max-w-7xl">
+        <div className="grid md:grid-rows-3 grid-cols-3 gap-6 w-full max-w-7xl">
 
             {plainLinks.map((link) => (
                 <div key={link._id} className="h-auto">
