@@ -6,6 +6,7 @@ import UrlGrid from "@/components/UrlGrid";
 import AutoRefresh from "@/components/Autorefresh";
 import {connectToDatabase} from "@/lib/mongoose";
 import Link from "@/models/Link";
+import LinkMessage from "@/components/linkMessage";
 type PageProps = {
     params: Promise<{ _id: string }>;
 };
@@ -46,6 +47,7 @@ const Page = async ({ params }: PageProps) => {
             <div className="w-1/7 border-r-2 border-border flex flex-col p-5">
                 <h1 className="mb-5 text-lg font-semibold text-center">Utilities</h1>
                 <GenerateLinkButton />
+                <LinkMessage user_id = {id}/>
             </div>
 
             {/* Main content */}

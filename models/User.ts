@@ -7,6 +7,7 @@ export interface IUser extends Document {
   lastName?: string | null;
   imageUrl?: string | null;
   deleted?: boolean;
+  linkMessage?: string | null;
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -19,6 +20,7 @@ const UserSchema = new Schema<IUser>(
     lastName: { type: String },
     imageUrl: { type: String },
     deleted: { type: Boolean, default: false },
+    linkMessage: { type: String },
   },
   { timestamps: true }
 );

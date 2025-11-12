@@ -7,6 +7,7 @@ export interface ILink extends Document {
   createdAt?: Date;
   updatedAt?: Date;
   clientName?: string | null;
+  linkMessage?: string | null;
 }
 
 const LinkSchema = new Schema<ILink>(
@@ -15,6 +16,7 @@ const LinkSchema = new Schema<ILink>(
     videoUrl: { type: String },
     thumbUrl: { type: String },
     clientName: { type: String },
+    linkMessage: { type: String },
   },
   { timestamps: true }
 );

@@ -26,11 +26,13 @@ export async function POST(req: NextRequest) {
 
     const videoUrl = typeof payload?.videoUrl === "string" && payload.videoUrl.length > 0 ? payload.videoUrl : undefined;
     const clientName = typeof payload?.clientName === "string" && payload.clientName.length > 0 ? payload.clientName : undefined;
+    const linkMessage = typeof payload?.oneTimeLinkMessage === "string" && payload.oneTimeLinkMessage.length > 0 ? payload.oneTimeLinkMessage : undefined;
 
     const link = await Link.create({
       user: mongoUser._id,
       videoUrl,
-      clientName
+      clientName,
+      linkMessage,
 
     });
 
@@ -56,7 +58,7 @@ export async function PUT(req: NextRequest) {
 
         await connectToDatabase();
         const link = await Link.findById(link_id);
-        if (!link) return NextResponse.json({ error: "Not found" }, { status: 404 });
+        if (!link) return NextResponse.json({ error: "Link Not found" }, { status: 404 });
 
         link.videoUrl = videoUrl;
         link.thumbUrl = thumbUrl;

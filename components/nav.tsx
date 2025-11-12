@@ -4,10 +4,11 @@ import Image from "next/image";
 import { SignedIn, SignedOut, SignInButton, SignUpButton, UserButton } from "@clerk/nextjs";
 import Link from "next/link";
 import {currentUser} from "@clerk/nextjs/server";
+
 const Nav = async () => {
-    let data;
     const user = await currentUser();
     const id = user?.privateMetadata.id;
+
 
     return (
         <div className={'w-full bg-accent'}>
@@ -16,12 +17,12 @@ const Nav = async () => {
             <Image src={'/vercel.svg'} alt={'Vercel Logo'} width={50} height={50} />
             <div className={'content-center justify-center flex gap-3'}>
                 <SignedOut>
-                    <SignInButton mode="modal">
+                    <SignInButton mode="modal" signUpForceRedirectUrl={'/'}>
                         <button className={'content-center bg-amber-700 rounded-3xl px-5 py-2 hover:bg-amber-600 duration-150'}>
                             Sign in
                         </button>
                     </SignInButton>
-                    <SignUpButton mode="modal">
+                    <SignUpButton mode="modal" signInForceRedirectUrl={'/'}>
                         <button className={'content-center bg-amber-700 rounded-3xl px-5 py-2 hover:bg-amber-600 duration-150'}>
                             Sign up
                         </button>

@@ -6,6 +6,8 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import {getThumbnail} from "@/lib/actions/cloudinary/thumbnail/route";
 import {Spinner} from "@/components/ui/spinner";
+import LinkMessage from "@/components/linkMessage";
+import { Skeleton } from "@/components/ui/skeleton";
 
 type PageProps = {
     params: { link_id: string } | Promise<{ link_id: string }>;
@@ -19,12 +21,13 @@ export default function ScreenRecordButton({ params }: PageProps) {
     const [linkId, setLinkId] = useState<string | null>(null);
     const [videoExists, setVideoExists] = useState<boolean>(false);
     const [file, setFile] = useState<File | null>(null);
+    const [linkMessage, setLinkMessage] = useState<string | null>(null);
+    const [fetchFinished, setFetchFinished] = useState(false);
     const router = useRouter();
 
     const mediaRecorderRef = useRef<MediaRecorder | null>(null);
     const chunksRef = useRef<Blob[]>([]);
 
-    // Set linkId from params
     useEffect(() => {
         if (params instanceof Promise) {
             params.then((p) => setLinkId(p.link_id));
@@ -40,14 +43,16 @@ export default function ScreenRecordButton({ params }: PageProps) {
             try {
                 const res = await fetch(`/api/db/links/${linkId}`, {
                     method: "GET",
-                    headers: { Action: "islinkactive"},
+                    headers: { Action: "checkForVideo"},
                 });
                 const data = await res.json();
+                console.log(data.islinkactive)
                 if (!data.islinkactive) {
                     setVideoExists(false);
+
                 } else {
-                    setVideoExists(true);
-                    setVideoUrl(data.islinkactive.videoUrl);
+                    router.push("./thankyou");
+
                 }
             } catch (err) {
                 console.error("Error checking video:", err);
@@ -167,10 +172,29 @@ export default function ScreenRecordButton({ params }: PageProps) {
         }
     }
 
+    async function getMessageLink () {
+        try {
+            const res = await fetch(`/api/db/links/${linkId}`, {
+                method: "GET",
+                headers: { Action: "getLinkMessage" },
+            });
+            const data = await res.json();
+            setFetchFinished(true)
+            setLinkMessage(data.linkMessage)
+        } catch (err) {
+            console.error("Error fetching link message:", err);
+        }
+    }
+
+    useEffect(() => {
+        if (!linkId) return;
+        getMessageLink()
+    }, [linkId]);
+
     return (
         <div className="flex flex-col items-center gap-6 w-screen flex-1 justify-center">
 
-            {!previewUrl && ( <h1 className={'text-2xl'}>Please take a short Screen Recording to be sent to your support agent.</h1>)}
+            {!previewUrl && fetchFinished ? ( <h1 className={'text-2xl'}>{linkMessage ? linkMessage : 'Please take a short Screen Recording to be sent to your support agent.'}</h1>) :  <Skeleton className="h-15 w-[250px]" />}
             <div className={'flex flex-row gap-5'}>
 
             <Button

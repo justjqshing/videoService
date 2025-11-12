@@ -10,7 +10,6 @@ const AutoRefresh = () => {
         const eventSource = new EventSource("/api/notifications/stream");
 
         eventSource.onmessage = (event) => {
-            console.log("🔁 Change detected:", event.data);
             router.refresh(); // revalidates and reloads server components
         };
 
