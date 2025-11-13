@@ -27,11 +27,10 @@ export default function RootLayout({
         <ClerkProvider publishableKey={process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}>
             <html lang="en" className="dark">
             <body
-                className={`${geistSans.variable} ${geistMono.variable} antialiased overflow-x-hidden min-h-screen flex flex-col`}
+                className={`${geistSans.variable} ${geistMono.variable} antialiased overflow-x-hidden flex flex-col`}
             >
-            <Nav />
-
-            <main className="flex flex-1">
+            <main className="flex flex-1 grow flex-col overflow-hidden max-h-screen">
+                <Nav />
                 {children}
             </main>
 

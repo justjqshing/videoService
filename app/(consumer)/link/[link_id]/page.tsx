@@ -194,7 +194,7 @@ export default function ScreenRecordButton({ params }: PageProps) {
     return (
         <div className="flex flex-col items-center gap-6 w-screen flex-1 justify-center">
 
-            {!previewUrl && fetchFinished ? ( <h1 className={'text-2xl'}>{linkMessage ? linkMessage : 'Please take a short Screen Recording to be sent to your support agent.'}</h1>) :  <Skeleton className="h-15 w-[250px]" />}
+            {!previewUrl ? fetchFinished ? ( <h1 className={'text-2xl'}>{linkMessage ? linkMessage : 'Please take a short Screen Recording to be sent to your support agent.'}</h1>) : (<Skeleton className="h-8 w-96" />) : null}
             <div className={'flex flex-row gap-5'}>
 
             <Button

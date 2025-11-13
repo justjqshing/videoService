@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import {Spinner} from "@/components/ui/spinner";
 import {toast} from "sonner";
-import { Toaster } from "sonner";
+
 interface UrlCardProps {
     _id: string;
     user: string;
@@ -52,7 +52,7 @@ const UrlCard = ({ videoUrl, createdAt, thumbUrl, clientName, _id }: UrlCardProp
 
 
     return (
-        <div className="max-w-sm rounded-xl shadow-md overflow-hidden border border-gray-200 bg-black hover:shadow-lg transition-shadow duration-300">
+        <div className="w-full rounded-xl shadow-md overflow-hidden border border-gray-200 bg-black hover:shadow-lg transition-shadow duration-300">
             <div className="relative w-full h-60">
                 <a href={videoUrl} target="_blank" rel="noopener noreferrer">
                     <Image
@@ -78,7 +78,7 @@ const UrlCard = ({ videoUrl, createdAt, thumbUrl, clientName, _id }: UrlCardProp
                     </p>
                 )}
                 <div className="flex  gap-5">
-                <Button variant="default" className="mt-2 hover:cursor-pointer" onClick={() => {navigator.clipboard.writeText(`${window.location.origin}/link/` + _id), toast.info("Copied to clipboard!") }}>
+                <Button variant="default" className="mt-2 hover:cursor-pointer" onClick={() => { navigator.clipboard.writeText(`${window.location.origin}/link/` + _id); toast.info("Copied to clipboard!"); }}>
                     Copy Url
                 </Button>
                 <Button variant="destructive" className="mt-2 hover:cursor-pointer" onClick={deleteUrl}>

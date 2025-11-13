@@ -109,7 +109,7 @@ export default function GenerateLinkButton() {
                     {loading ? "Generating..." : "Generate Link"}
                 </Button>
             </div>
-            <Button onClick={() => router.refresh()}>Refresh</Button>
+
             {error && <p className="text-red-600 text-sm">{error}</p>}
             {result && (
                 <div className="text-sm">

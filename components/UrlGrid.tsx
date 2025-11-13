@@ -1,5 +1,4 @@
 import UrlCard from "@/components/UrlCard";
-import Image from "next/image";
 import React from "react";
 
 interface Link {
@@ -20,10 +19,10 @@ interface UrlGridProps {
 const UrlGrid = ({ plainLinks }: UrlGridProps) => {
 
     return (
-        <div className="grid md:grid-rows-3 grid-cols-3 gap-6 w-full max-w-7xl">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 auto-rows-auto gap-6 w-full">
 
             {plainLinks.map((link) => (
-                <div key={link._id} className="h-auto">
+                <div key={link._id}>
                     <UrlCard {...link} />
                 </div>
             ))}
