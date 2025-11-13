@@ -26,16 +26,14 @@ export default function RootLayout({
     return (
         <ClerkProvider publishableKey={process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}>
             <html lang="en" className="dark">
-            <body
-                className={`${geistSans.variable} ${geistMono.variable} antialiased overflow-x-hidden flex flex-col`}
-            >
-            <main className="flex flex-1 grow flex-col overflow-hidden max-h-screen">
-                <Nav />
+            <body className={`${geistSans.variable} ${geistMono.variable} antialiased overflow-x-hidden flex flex-col h-screen`}>
+            <Nav />
+            <main className="flex-1 flex overflow-hidden">
                 {children}
             </main>
-
             <Toaster richColors position="top-center"/>
             </body>
+
             </html>
         </ClerkProvider>
     );
