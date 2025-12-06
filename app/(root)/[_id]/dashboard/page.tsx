@@ -48,8 +48,8 @@ const Page = async ({ params }: PageProps) => {
                 <div className="flex-1 flex flex-col justify-between">
                     <div>
                         <h1 className="mb-5 text-lg font-semibold text-center">Utilities</h1>
-                        <GenerateLinkButton />
-                        <LinkMessage user_id={id} />
+                            <GenerateLinkButton />
+                            <LinkMessage user_id={id} />
                     </div>
                     <RefreshButton />
                 </div>
